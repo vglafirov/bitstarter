@@ -12,7 +12,7 @@ fs.exists(fileName, function(exists) {
 	    var buffer = new Buffer(stats.size);
 	    buffer = fs.readFileSync(fileName)
 	    app.get('/', function(request, response) {
-		response.send(data);
+		response.send(buffer.toString());
 	    });
 	});
     }
