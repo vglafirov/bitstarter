@@ -6,29 +6,27 @@ app.use(express.logger());
 
 var fileName = "index.html"
 
+//buffer.write(fs.readFileSync("index.html").toString())
+
 fs.exists(fileName, function(exists) {
-    if (exists){
-	fs.watch(fileName, {
-	    persistent: true
-	}, function(event, fileName) {
-	    fs.stat(fileName, function(error, stats) {
-		fs.readFileSync(fileName, function(error, stream){
-		    var buffer = new Buffer(stats.size);
-		    buffer.write(stream);
+    if (exists) {
+	fs.stat(fileName, function(error, stats) {
+	    fs.open(fileName, "r", function(error, fd) {
+		var buffer = new Buffer(stats.size);
+		fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
 		    var data = buffer.toString("utf8", 0, buffer.length);
 		    app.get('/', function(request, response) {
 			response.send(data);
 		    });
-		    console.log(data)
+		    console.log(data);
+		    fs.close(fd);
 		});
 	    });
 	});
-
     }
 });
 
-
-//buffer.write(fs.readFileSync("index.html").toString())
+//});
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
