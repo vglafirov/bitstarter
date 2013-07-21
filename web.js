@@ -6,13 +6,26 @@ app.use(express.logger());
 
 var fileName = "index.html"
 
-var stat = fs.statSync(fileName)
+fs.exists(fileName, function(exists) {
+    if (exists){
+	fs.watch(fileName, {
+	    persistent: true
+	}, function(event, fileName) {
+	    fs.stat(fileName, function(error, stats) {
+		fs.readFileSync(fileName, function(error, stream){
+		    var buffer = new Buffer(stats.size);
+		    buffer.write(stream);
+		    var data = buffer.toString("utf8", 0, buffer.length);
+		    console.log(data)
+		});
+	    });
+	});
 
-var fileInfo = util.inspect(stat)
+    }
+});
 
-var buffer = Buffer(fileInfo['size'])
 
-buffer.write(fs.readFileSync("index.html").toString())
+//buffer.write(fs.readFileSync("index.html").toString())
 
 app.get('/', function(request, response) {
     response.send(buffer.toString());
