@@ -1,9 +1,16 @@
 var express = require('express');
 var fs = require('fs');
+var util = require('util')
 var app = express();
 app.use(express.logger());
 
-var buffer = Buffer(256)
+var fileName = "index.html"
+
+var stat = fs.statSync(fileName)
+
+var fileInfo = util.inspect(stat)
+
+var buffer = Buffer(fileInfo['size'])
 
 buffer.write(fs.readFileSync("index.html").toString())
 
