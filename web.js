@@ -10,8 +10,7 @@ fs.exists(fileName, function(exists) {
     if (exists) {
 	fs.stat(fileName, function(error, stats) {
 	    var buffer = new Buffer(stats.size);
-	    buffer.write(fs.readFileSync(fileName, 'utf8'), stats.size)
-	    var data = buffer.toString("utf8", 0, buffer.length);
+	    buffer = fs.readFileSync(fileName)
 	    app.get('/', function(request, response) {
 		response.send(data);
 	    });
