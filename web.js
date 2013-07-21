@@ -16,6 +16,9 @@ fs.exists(fileName, function(exists) {
 		    var buffer = new Buffer(stats.size);
 		    buffer.write(stream);
 		    var data = buffer.toString("utf8", 0, buffer.length);
+		    app.get('/', function(request, response) {
+			response.send(buffer.toString());
+		    });
 		    console.log(data)
 		});
 	    });
@@ -26,10 +29,6 @@ fs.exists(fileName, function(exists) {
 
 
 //buffer.write(fs.readFileSync("index.html").toString())
-
-app.get('/', function(request, response) {
-    response.send(buffer.toString());
-});
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
