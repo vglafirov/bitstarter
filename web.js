@@ -17,7 +17,7 @@ fs.exists(fileName, function(exists) {
 		    buffer.write(stream);
 		    var data = buffer.toString("utf8", 0, buffer.length);
 		    app.get('/', function(request, response) {
-			response.send(buffer.toString());
+			response.send(data);
 		    });
 		    console.log(data)
 		});
